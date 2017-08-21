@@ -1,56 +1,113 @@
-## Project: Build a Traffic Sign Recognition Program
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
+**Traffic Sign Recognition** 
 
-Overview
----
-In this project, you will use what you've learned about deep neural networks and convolutional neural networks to classify traffic signs. You will train and validate a model so it can classify traffic sign images using the [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). After the model is trained, you will then try out your model on images of German traffic signs that you find on the web.
+### Data Set Summary & Exploration
 
-We have included an Ipython notebook that contains further instructions 
-and starter code. Be sure to download the [Ipython notebook](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb). 
+#### 1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
 
-We also want you to create a detailed writeup of the project. Check out the [writeup template](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/writeup_template.md) for this project and use it as a starting point for creating your own writeup. The writeup can be either a markdown file or a pdf document.
+I used the pandas library to read the csv file and calculate summary statistics of the traffic
+signs data set:
 
-To meet specifications, the project will require submitting three files: 
-* the Ipython notebook with the code
-* the code exported as an html file
-* a writeup report either as a markdown or pdf file 
+Number of training examples = 34799
+Number of testing examples = 12630
+Image data shape = (32, 32, 3)
+Number of classes = 43
 
-Creating a Great Writeup
----
-A great writeup should include the [rubric points](https://review.udacity.com/#!/rubrics/481/view) as well as your description of how you addressed each point.  You should include a detailed description of the code used in each step (with line-number references and code snippets where necessary), and links to other supporting documents or external references.  You should include images in your writeup to demonstrate how your code works with examples.  
+#### 2. Include an exploratory visualization of the dataset.
 
-All that said, please be concise!  We're not looking for you to write a book here, just a brief description of how you passed each rubric point, and references to the relevant code :). 
+A bar chart is used for visualizing the sample count for every signle class.
 
-You're not required to use markdown for your writeup.  If you use another method please just submit a pdf of your writeup.
+###Design and Test a Model Architecture
 
-The Project
----
-The goals / steps of this project are the following:
-* Load the data set
-* Explore, summarize and visualize the data set
-* Design, train and test a model architecture
-* Use the model to make predictions on new images
-* Analyze the softmax probabilities of the new images
-* Summarize the results with a written report
+#### First step: grayscale. 
+The reason behind it is that grayscale uses less infomation and big signal-to-noise ratio.
 
-### Dependencies
-This lab requires:
+But weird thing happend to me and I will keep debugging it in the following days.
 
-* [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit)
+I tried some many methods: like just average the rgb, tf.image.rgb_to_grayscale, cv2.cvtColor. 
+And also np.dot(rgb[...,:3], [0.299, 0.587, 0.114]). I am wondering why the images are not grayscaled. Maybe something wrong with my original dataset?
 
-The lab environment can be created with CarND Term1 Starter Kit. Click [here](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) for the details.
 
-### Dataset and Repository
+##### Second step: normalize.
+The simplest one has been used. (img - 128)/128.
 
-1. Download the data set. The classroom has a link to the data set in the "Project Instructions" content. This is a pickled dataset in which we've already resized the images to 32x32. It contains a training, validation and test set.
-2. Clone the project, which contains the Ipython notebook and the writeup template.
-```sh
-git clone https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project
-cd CarND-Traffic-Sign-Classifier-Project
-jupyter notebook Traffic_Sign_Classifier.ipynb
-```
 
-### Requirements for Submission
-Follow the instructions in the `Traffic_Sign_Classifier.ipynb` notebook and write the project report using the writeup template as a guide, `writeup_template.md`. Submit the project code and writeup document.
-# CarND-P02-TrafficSigns
-# CarND-P02-TrafficSigns
+#### 3. Model architecture
+
+My final model consisted of the following layers:
+
+| Layer         		|     Description	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| Input         		| 32x32x1 Normalized+grascaled image  | 
+| Convolution 3x3     	| 1x1 stride, valid padding, outputs 28x28x6 	|
+| RELU					|												|
+| Max pooling	      	| 2x2 stride,  outputs 14x14x6 				|
+| Convolution 3x3	    | 1x1 stride, valid padding, outputs 10x10x16 	|
+| RELU					|												|
+| Max pooling	      	| 2x2 stride,  outputs 5x5x16 				|
+| Flattern      |  outputs 400              |
+| Fully connected		| 400 --> 120									|
+| Fully connected		| 120 --> 84       									|
+| Fully connected		| 84 --> 49       									|
+
+ 
+
+#### 4. Train my model
+
+To train the model, I used an cross_entropy as loss function. Optimize the loss function with AdamOptimizer by reducing the mean value.
+
+My model parameters:
+* EPOCHS = 30
+* BATCH_SIZE = 128
+* rate = 0.0008
+
+#### 5. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
+
+My final model results were:
+* validation set accuracy of 0.940
+* test set accuracy of 0.926
+
+* Which parameters were tuned? How were they adjusted and why?
+* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
+
+Not really very clear about this two questions, I will spend more time on the real meaning behind the network. Like the fully-connected network, not really know the meaning of numbers.
+
+
+### Test a Model on New Images
+
+#### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
+
+The image size is not the same as what we have in the dataset.
+So I used img = cv2.resize(img, (32,32)) to get those pictures in shape.
+
+#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set.
+
+I chose a blurry speed limit(30) to see the result.
+
+Here are the results of the prediction:
+* Speed Limit(30) --> Speed Limit(30)
+* Speed Limit(50) --> Speed Limit(50)
+* End of Speed Limit(80) --> End of Speed Limit(80)
+* Stop --> Stop
+* Turn right ahead --> Turn right ahead
+* Ahead only --> Ahead only
+
+The model was able to correctly guess 6 of the 6 traffic signs, which gives an accuracy of 100%. This compares favorably to the accuracy on the test set of 100%
+
+#### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability.
+
+The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+
+Lets take the first image as an example. The rest can be seen in the html file.
+
+For the first image, the model is relatively sure that this is a stop sign (probability of 1.0), and the image does contain a stop sign. The top five soft max probabilities were
+
+| Probability         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 1.         			| Speed limit(30 m/s)									| 
+| .0     				| Speed limit(20 m/s) 								|
+| .0					| Speed limit(50 m/s)											|
+| .0	      			| Speed limit(60 m/s)					 				|
+| .0				    | Speed limit(70 m/s)      							|
+
+
+
