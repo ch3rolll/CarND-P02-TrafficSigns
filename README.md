@@ -58,9 +58,9 @@ My final model consisted of the following layers:
 To train the model, I used an cross_entropy as loss function. Optimize the loss function with AdamOptimizer by reducing the mean value.
 
 My model parameters:
- EPOCHS = 30
- BATCH_SIZE = 128
- rate = 0.0008
+* EPOCHS = 30
+* BATCH_SIZE = 128
+* rate = 0.0008
 
 #### 5. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
@@ -86,12 +86,12 @@ So I used img = cv2.resize(img, (32,32)) to get those pictures in shape.
 I chose a blurry speed limit(30) to see the result.
 
 Here are the results of the prediction:
-  Speed Limit(30) --> Speed Limit(30)
-  Speed Limit(50) --> Speed Limit(50)
-  End of Speed Limit(80) --> End of Speed Limit(80)
-  Stop --> Stop
-  Turn right ahead --> Turn right ahead
-  Ahead only --> Ahead only
+* Speed Limit(30) --> Speed Limit(30)
+* Speed Limit(50) --> Speed Limit(50)
+* End of Speed Limit(80) --> End of Speed Limit(80)
+* Stop --> Stop
+* Turn right ahead --> Turn right ahead
+* Ahead only --> Ahead only
 
 The model was able to correctly guess 6 of the 6 traffic signs, which gives an accuracy of 100%. This compares favorably to the accuracy on the test set of 100%
 
