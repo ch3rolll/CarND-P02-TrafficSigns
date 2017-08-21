@@ -1,4 +1,4 @@
-#**Traffic Sign Recognition** 
+**Traffic Sign Recognition** 
 
 ### Writeup / README
 
@@ -20,7 +20,7 @@ A bar chart is used for visualizing the sample count for every signle class.
 
 ###Design and Test a Model Architecture
 
-# First step: grayscale. 
+#### First step: grayscale. 
 The reason behind it is that grayscale uses less infomation and big signal-to-noise ratio.
 
 But weird thing happend to me and I will keep debugging it in the following days.
@@ -29,7 +29,7 @@ I tried some many methods: like just average the rgb, tf.image.rgb_to_grayscale,
 And also np.dot(rgb[...,:3], [0.299, 0.587, 0.114]). I am wondering why the images are not grayscaled. Maybe something wrong with my original dataset?
 
 
-# Second step: normalize.
+##### Second step: normalize.
 The simplest one has been used. (img - 128)/128.
 
 
