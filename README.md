@@ -66,10 +66,22 @@ My final model results were:
 * validation set accuracy of 0.940
 * test set accuracy of 0.926
 
+Questions:
 * Which parameters were tuned? How were they adjusted and why?
 * What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
 
-Not really very clear about this two questions, I will spend more time on the real meaning behind the network. Like the fully-connected network, not really know the meaning of numbers.
+A: Not really very clear about this two questions, I will spend more time on the real meaning behind the network. Like the fully-connected network, not really know the meaning of numbers.
+
+* What was the first architecture that was tried and why was it chosen?
+A: I chose Lenet5, which seems a good starting point, as it works totally well with MNIST dataset
+* What were some problems with the initial architecture?
+A: The accuracy is not very high. It just reaches 94% after tuning the parameters a bit
+* How was the architecture adjusted and why was it adjusted?
+A: I just changed the output number from 10 to 43, since we have 43 different classes from the dataset
+* Which parameters were tuned? How were they adjusted and why?
+A: The learning rate and batch. Firstly, I decreased the learning rate and the batch size in order to get a more smooth accuracy curve and reach a 93%. Will spend more time on the mearning of them.
+* What are some of the important design choices and why were they chosen?
+I tuned the output numbers of those fully connect layers around. No significant changes happened. So I will read the discussion about the parameters of the networks.
 
 
 ### Test a Model on New Images
